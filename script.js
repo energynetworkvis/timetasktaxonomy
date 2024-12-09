@@ -196,13 +196,22 @@ d3.csv(url)
 				return d3.select("#check_" + d).property("checked");
 			});
 
+			var audienceFilters = audiencetypes.filter(function (d) {
+				return d3.select("#check_" + d).property("checked");
+			});
+
+			var networkFilters = networktypes.filter(function (d) {
+				return d3.select("#check_" + d).property("checked");
+			});
+
 			// update
-			refreshTechniques(filters, dataFilters);
+			refreshTechniques(filters, dataFilters, audienceFilters, networkFilters);
 		});
 
-		function refreshTechniques(filters, dataFilters) {
+		function refreshTechniques(filters, dataFilters, audienceFilters, networkFilters) {
 			// filter
-			var fData = data.filter((d) => filterData(d, filters, dataFilters));
+			var fData = data.filter((d) => filterData(d, filters, dataFilters, audienceFilters,
+				networkFilters));
 			// update count in heading
 			d3.select("#count").text(fData.length);
 			// get IDs of techniques matching filter
@@ -246,6 +255,9 @@ d3.csv(url)
 				.classed(facet, true)
 				.html((d) => d[facet]);
 		});
+
+		// add user notes
+		div.append("h4").text((d) => d.Notes);
 	})
 	.then(function () {
 		imagesLoaded(".grid", function () {
@@ -262,7 +274,7 @@ d3.csv(url)
 		throw error;
 	});
 
-function filterData(d, filters, dataFilters) {
+function filterData(d, filters, dataFilters, audienceFilters, networkFilters) {
 	return (
 		filters.every(function (fil) {
 			// facet: fil[0]
@@ -271,6 +283,12 @@ function filterData(d, filters, dataFilters) {
 			return fil[1].length == 0 || fil[1].indexOf(d[fil[0]]) != -1;
 		}) &&
 		dataFilters.every(function (fil) {
+			return d[fil] == "yes";
+		}) &&
+		audienceFilters.every(function (fil) {
+			return d[fil] == "yes";
+		}) &&
+		networkFilters.every(function (fil) {
 			return d[fil] == "yes";
 		})
 	);

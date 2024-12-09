@@ -67,6 +67,11 @@ h3 {
 	text-align: left;
 }
 
+h4 {
+	font-size: 10px;
+	color: tomato;
+}
+
 #controls a {
 	color: #fafafa;
 	text-decoration: underline;
