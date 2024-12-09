@@ -123,7 +123,7 @@ h4 {
 }
 
 #filters {
-	text-align: center;
+	text-align: left;
 }
 
 #filters input[type="checkbox"]:checked+label {
@@ -193,11 +193,12 @@ div.checkbox-container {
 #select_geography_representation label,
 /* #select_node_representation label, */
 /* #select_link_representation label, */
-#select_time_representation label,
-#select_interactivity label {
+#select_time_representation label
+/* #select_interactivity label {
 	width: 88px;
-}
+} */
+
+/* #select_audience label */
 
 /* #select_composition label {
-	width: 138px;
-} */
+	width: 138px;} */

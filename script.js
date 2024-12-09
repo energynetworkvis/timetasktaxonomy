@@ -4,9 +4,10 @@ const taxonomy = {
 	geography_representation: ["mapped", "distorted", "abstract"],
 	//node_representation: ["explicit", "aggregated", "abstract"],
 	//link_representation: ["explicit", "aggregated", "abstract"],
-	time_representation: ["single_frame", "small_multiples", "animation_playback", "juxtaposed", "integrated"],
+	time_representation: ["single_frame", "small_multiples", "time_slider", "time_series_charts", "integrated"],
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
-	interactivity: ["not_required", "required", "interaction_only"],
+	//interactivity: ["not_required", "required", "interaction_only"],
+	//audience: ["power_engineers", "control_room_operators", "non-experts"]
 };
 
 const facets = Object.keys(taxonomy);
@@ -35,12 +36,15 @@ const datatypes = [
 	"3D",
 	"VR",
 	"graph_layouts",
-	"dashboard"
+	"dashboard",
+	"contours"
 ];
 
 const audiencetypes = [
 	"power_engineers",
-	"control_room_operators"
+	"control_room_operators",
+	"energy_experts",
+	"energy_non-experts"
 ];
 
 const networktypes = [
