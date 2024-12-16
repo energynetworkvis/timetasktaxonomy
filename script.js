@@ -4,7 +4,7 @@ const taxonomy = {
 	geography_representation: ["mapped", "distorted", "abstract"],
 	//node_representation: ["explicit", "aggregated", "abstract"],
 	//link_representation: ["explicit", "aggregated", "abstract"],
-	time_representation: ["single_frame", "small_multiples", "time_slider", "time_series_charts", "integrated"],
+	time_representation: ["single_frame", "small_multiples", "time_slider", "integrated"],
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
 	//interactivity: ["not_required", "required", "interaction_only"],
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
@@ -34,15 +34,20 @@ const datatypes = [
 	//"uncertain_locations",
 	//"uncertain_additional_attributes",
 	"3D",
-	"VR",
-	"graph_layouts",
+	"animation",
+	"AR",
+	"bar_chart",
+	"contours",
 	"dashboard",
-	"contours"
+	"flow_map",
+	"line_graph",
+	"sankey",
+	"VR"
 ];
 
 const audiencetypes = [
-	"power_engineers",
-	"control_room_operators",
+	"planning",
+	"operational",
 	"energy_experts",
 	"energy_non-experts"
 ];
