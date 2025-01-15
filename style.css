@@ -190,10 +190,11 @@ div.checkbox-container {
 	}
 }
 
+
 #select_geography_representation label,
 /* #select_node_representation label, */
 /* #select_link_representation label, */
-#select_time_representation label
+#select_time_representation label,
 /* #select_interactivity label {
 	width: 88px;
 } */

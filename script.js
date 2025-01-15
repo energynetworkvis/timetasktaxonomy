@@ -4,7 +4,8 @@ const taxonomy = {
 	geography_representation: ["mapped", "distorted", "abstract"],
 	//node_representation: ["explicit", "aggregated", "abstract"],
 	//link_representation: ["explicit", "aggregated", "abstract"],
-	time_representation: ["single_frame", "small_multiples", "time_slider", "integrated"],
+	time_representation: ["single_frame", "real-time", "small_multiples", "animation_playback", "time_slider", "integrated"],
+	time_unit: ["seconds", "minutes", "years", "NA"],
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
 	//interactivity: ["not_required", "required", "interaction_only"],
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
@@ -40,6 +41,7 @@ const datatypes = [
 	"contours",
 	"dashboard",
 	"flow_map",
+	"interactive",
 	"line_graph",
 	"sankey",
 	"VR"
@@ -58,7 +60,14 @@ const networktypes = [
 	"transmission"
 ];
 
+
+
 const container = d3.select(".grid");
+
+// Initialize slider
+var slider = d3.slider().min(0).max(10).ticks(10).showRange(true).value(6);
+// Render the slider in the div
+d3.select('#slider').call(slider);
 
 // create checkboxes to filter techniques
 var filters = d3
@@ -282,6 +291,9 @@ d3.csv(url)
 	.catch(function (error) {
 		throw error;
 	});
+
+
+
 
 function filterData(d, filters, dataFilters, audienceFilters, networkFilters) {
 	return (
