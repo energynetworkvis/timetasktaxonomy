@@ -5,12 +5,21 @@ const taxonomy = {
 	//node_representation: ["explicit", "aggregated", "abstract"],
 	//link_representation: ["explicit", "aggregated", "abstract"],
 	time_representation: ["single_frame", "real-time", "small_multiples", "animation_playback", "time_slider", "integrated"],
+	time_period: [],
 	time_unit: ["seconds", "minutes", "years", "NA"],
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
 	//interactivity: ["not_required", "required", "interaction_only"],
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
 	publication: [],
 	publication_domain: [],
+	research_application: [],
+	technology: [],
+	evaluation: [],
+	display_layout: [],
+	node_representation: [],
+	link_representation: [],
+	network_layout: [],
+	link_representation: []
 
 };
 
