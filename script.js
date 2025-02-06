@@ -9,6 +9,9 @@ const taxonomy = {
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
 	//interactivity: ["not_required", "required", "interaction_only"],
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
+	publication: [],
+	publication_domain: [],
+
 };
 
 const facets = Object.keys(taxonomy);
