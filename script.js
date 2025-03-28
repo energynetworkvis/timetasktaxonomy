@@ -1,25 +1,18 @@
 const url = "energynetworks.csv";
 
 const taxonomy = {
-	geography_representation: ["mapped", "distorted", "abstract"],
+	//geography_representation: ["mapped", "distorted", "abstract"],
 	//node_representation: ["explicit", "aggregated", "abstract"],
 	//link_representation: ["explicit", "aggregated", "abstract"],
-	time_representation: ["single_frame", "real-time", "small_multiples", "animation_playback", "time_slider", "integrated"],
-	time_period: [],
-	time_unit: ["seconds", "minutes", "years", "NA"],
+	//time_representation: ["single_frame", "real-time", "small_multiples", "animation_playback", "time_slider", "integrated"],
+	//time_unit: ["seconds", "minutes", "years", "NA"],
 	//composition: ["juxtaposed", "superimposed", "nested", "integrated"],
 	//interactivity: ["not_required", "required", "interaction_only"],
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
-	publication: [],
-	publication_domain: [],
-	research_application: [],
-	technology: [],
-	evaluation: [],
-	display_layout: [],
-	node_representation: [],
-	link_representation: [],
-	network_layout: [],
-	link_representation: []
+	//display_layout: [],
+	//interaction: [],
+	task: ["identify", "monitor", "analyse"],
+	task_secondary: ["geographic", "pseudo-geographic", "schematic"],
 
 };
 
@@ -58,21 +51,6 @@ const datatypes = [
 	"sankey",
 	"VR"
 ];
-
-const audiencetypes = [
-	"planning",
-	"operational",
-	"energy_experts",
-	"energy_non-experts"
-];
-
-const networktypes = [
-	"microgrid",
-	"distribution",
-	"transmission"
-];
-
-
 
 const container = d3.select(".grid");
 
@@ -147,58 +125,6 @@ d3.select("#showall").on("click", function () {
 	eventHandler.dispatchEvent(event);
 });
 
-// checkboxes for audience types
-var checkData = d3
-	.select("#filters_audience")
-	.selectAll("div")
-	.data(audiencetypes)
-	.enter()
-	.append("div");
-checkData
-	.append("input")
-	.attr("type", "checkbox")
-	.attr("class", "input")
-	.attr("id", (d) => "check_" + d)
-	.attr("value", (d) => d);
-checkData
-	.append("label")
-	.attr("for", (d) => "check_" + d)
-	.append("span")
-	.text((d) => sentenceCase(d));
-
-d3.select("#showall").on("click", function () {
-	d3.selectAll("input").property("checked", false);
-	// dispatch event to reload techniques
-	let event = new Event("change");
-	eventHandler.dispatchEvent(event);
-});
-
-// checkboxes for network types
-var checkData = d3
-	.select("#filters_level")
-	.selectAll("div")
-	.data(networktypes)
-	.enter()
-	.append("div");
-checkData
-	.append("input")
-	.attr("type", "checkbox")
-	.attr("class", "input")
-	.attr("id", (d) => "check_" + d)
-	.attr("value", (d) => d);
-checkData
-	.append("label")
-	.attr("for", (d) => "check_" + d)
-	.append("span")
-	.text((d) => sentenceCase(d));
-
-d3.select("#showall").on("click", function () {
-	d3.selectAll("input").property("checked", false);
-	// dispatch event to reload techniques
-	let event = new Event("change");
-	eventHandler.dispatchEvent(event);
-});
-
 d3.csv(url)
 	.then(function (data) {
 		console.log(data);
@@ -226,22 +152,13 @@ d3.csv(url)
 				return d3.select("#check_" + d).property("checked");
 			});
 
-			var audienceFilters = audiencetypes.filter(function (d) {
-				return d3.select("#check_" + d).property("checked");
-			});
-
-			var networkFilters = networktypes.filter(function (d) {
-				return d3.select("#check_" + d).property("checked");
-			});
-
 			// update
-			refreshTechniques(filters, dataFilters, audienceFilters, networkFilters);
+			refreshTechniques(filters, dataFilters);
 		});
 
-		function refreshTechniques(filters, dataFilters, audienceFilters, networkFilters) {
+		function refreshTechniques(filters, dataFilters) {
 			// filter
-			var fData = data.filter((d) => filterData(d, filters, dataFilters, audienceFilters,
-				networkFilters));
+			var fData = data.filter((d) => filterData(d, filters, dataFilters));
 			// update count in heading
 			d3.select("#count").text(fData.length);
 			// get IDs of techniques matching filter
@@ -287,7 +204,7 @@ d3.csv(url)
 		});
 
 		// add user notes
-		div.append("h4").text((d) => d.Notes);
+		//div.append("h4").text((d) => d.Notes);
 	})
 	.then(function () {
 		imagesLoaded(".grid", function () {
@@ -307,7 +224,7 @@ d3.csv(url)
 
 
 
-function filterData(d, filters, dataFilters, audienceFilters, networkFilters) {
+function filterData(d, filters, dataFilters) {
 	return (
 		filters.every(function (fil) {
 			// facet: fil[0]
@@ -316,12 +233,6 @@ function filterData(d, filters, dataFilters, audienceFilters, networkFilters) {
 			return fil[1].length == 0 || fil[1].indexOf(d[fil[0]]) != -1;
 		}) &&
 		dataFilters.every(function (fil) {
-			return d[fil] == "yes";
-		}) &&
-		audienceFilters.every(function (fil) {
-			return d[fil] == "yes";
-		}) &&
-		networkFilters.every(function (fil) {
 			return d[fil] == "yes";
 		})
 	);
