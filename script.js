@@ -11,8 +11,10 @@ const taxonomy = {
 	//audience: ["power_engineers", "control_room_operators", "non-experts"]
 	//display_layout: [],
 	//interaction: [],
-	task: ["identify", "monitor", "analyse"],
-	task_secondary: ["geographic", "pseudo-geographic", "schematic"],
+	//task: ["identify", "monitor", "analyse"],
+	identify: ["mapped", "distorted", "abstract"],
+	monitor: ["single", "mapped_or_abstract", "multiple"],
+	analyse: ["passive", "exploration", "navigation", "filter_and_focus", "personalisation"]
 
 };
 
@@ -42,22 +44,45 @@ const datatypes = [
 	"3D",
 	"animation",
 	"AR",
-	"bar_chart",
+	"bar_charts",
+	"box_plots",
+	"chord_diagrams",
+	"colour_hue",
+	"colour_value_or_intensity",
 	"contours",
-	"dashboard",
-	"flow_map",
-	"interactive",
-	"line_graph",
-	"sankey",
+	"flow_maps",
+	"glyphs",
+	"histograms",
+	"line_charts",
+	"orientation",
+	"parallel_coordinates",
+	"pie_charts",
+	"radial_charts",
+	"sankey_diagrams",
+	"shape",
+	"size",
+	"tables_and_panels",
+	"texture",
+	"tooltips",
+	"vector_fields",
+	"VE",
 	"VR"
 ];
+
+const pubtypes = [
+	"computer_science",
+	"engineering",
+	"physics",
+	"systems",
+	"visualisation"
+]
 
 const container = d3.select(".grid");
 
 // Initialize slider
-var slider = d3.slider().min(0).max(10).ticks(10).showRange(true).value(6);
+//var slider = d3.slider().min(0).max(10).ticks(10).showRange(true).value(6);
 // Render the slider in the div
-d3.select('#slider').call(slider);
+//d3.select('#slider').call(slider);
 
 // create checkboxes to filter techniques
 var filters = d3
@@ -118,6 +143,25 @@ checkData
 	.append("span")
 	.text((d) => sentenceCase(d));
 
+// checkboxes for specific pub types
+var checkData = d3
+	.select("#filters_pubdata")
+	.selectAll("div")
+	.data(pubtypes)
+	.enter()
+	.append("div");
+checkData
+	.append("input")
+	.attr("type", "checkbox")
+	.attr("class", "input")
+	.attr("id", (d) => "check_" + d)
+	.attr("value", (d) => d);
+checkData
+	.append("label")
+	.attr("for", (d) => "check_" + d)
+	.append("span")
+	.text((d) => sentenceCase(d));
+
 d3.select("#showall").on("click", function () {
 	d3.selectAll("input").property("checked", false);
 	// dispatch event to reload techniques
@@ -127,7 +171,7 @@ d3.select("#showall").on("click", function () {
 
 d3.csv(url)
 	.then(function (data) {
-		console.log(data);
+		//console.log(data);
 
 		// display count
 		d3.selectAll("#count, #total").text(data.length);
@@ -137,6 +181,7 @@ d3.csv(url)
 			// get filter values
 			var filters = facets.map(function (facet) {
 				var cats = [];
+
 				taxonomy[facet].forEach(function (cat) {
 					if (
 						d3
@@ -144,21 +189,37 @@ d3.csv(url)
 							.property("checked")
 					) {
 						cats.push(cat);
+						console.log(cat);
 					}
 				});
 				return [facet, cats];
+
+
 			});
+
+			console.log(filters);
+			console.log(filters[0][1].length);
+			console.log(filters[1][1].length);
+			console.log(filters[2][1].length);
+
 			var dataFilters = datatypes.filter(function (d) {
 				return d3.select("#check_" + d).property("checked");
 			});
+			//console.log(dataFilters);
+
+			var pubFilters = pubtypes.filter(function (d) {
+				return d3.select("#check_" + d).property("checked");
+			});
+			//console.log(dataFilters);
 
 			// update
-			refreshTechniques(filters, dataFilters);
+			refreshTechniques(filters, dataFilters, pubFilters);
 		});
 
-		function refreshTechniques(filters, dataFilters) {
+		function refreshTechniques(filters, dataFilters, pubFilters) {
 			// filter
-			var fData = data.filter((d) => filterData(d, filters, dataFilters));
+			var fData = data.filter((d) => filterData(d, filters, dataFilters, pubFilters));
+			console.log(fData);
 			// update count in heading
 			d3.select("#count").text(fData.length);
 			// get IDs of techniques matching filter
@@ -196,12 +257,12 @@ d3.csv(url)
 		var tags = div.append("div").style("margin-top", "7px");
 
 		// add tags on technique cards
-		facets.forEach(function (facet) {
-			tags.append("div")
-				.classed("tag", true)
-				.classed(facet, true)
-				.html((d) => d[facet]);
-		});
+		//facets.forEach(function (facet) {
+		//	tags.append("div")
+		//		.classed("tag", true)
+		//		.classed(facet, true)
+		//		.html((d) => d[facet]);
+		//});
 
 		// add user notes
 		//div.append("h4").text((d) => d.Notes);
@@ -224,17 +285,23 @@ d3.csv(url)
 
 
 
-function filterData(d, filters, dataFilters) {
+function filterData(d, filters, dataFilters, pubFilters) {
 	return (
 		filters.every(function (fil) {
 			// facet: fil[0]
 			// selected: fil[1]
 			// check if either array is empty or category is selected
+			//console.log(fil[1]);
 			return fil[1].length == 0 || fil[1].indexOf(d[fil[0]]) != -1;
 		}) &&
+
 		dataFilters.every(function (fil) {
 			return d[fil] == "yes";
+		}) &&
+		pubFilters.every(function (fil) {
+			return d[fil] == "yes";
 		})
+
 	);
 }
 
